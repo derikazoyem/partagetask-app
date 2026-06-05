@@ -12,6 +12,8 @@
 
 ### 🌐 Live Demo → [partagetask.com](https://partagetask.com)
 
+> 🚧 **Work in progress** — new features are being added regularly.
+
 ---
 
 ## 📋 Table of Contents
