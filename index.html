@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PartageTask</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤝</text></svg>">
+<meta name="theme-color" content="#6c63ff">
+<meta name="description" content="Gestion collaborative des dépenses partagées">
+<!-- Préconnexion CDN Firebase -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+<link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="loading-inner">
+    <div class="brand-logo">Partage<span>Task</span></div>
+    <div class="spinner"></div>
+    <div id="loading-msg">Initialisation...</div>
+  </div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="screen">
+  <div class="auth-box">
+    <div class="brand">
+      <div class="brand-logo">Partage<span>Task</span></div>
+      <div class="brand-sub" id="t-brand-sub">Gestion collaborative des dépenses</div>
+    </div>
+    <button class="btn-google" id="btn-google">
+      <svg width="20" height="20" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      <span id="t-btn-google">Continuer avec Google</span>
+    </button>
+    <div class="divider"><span id="t-or">ou</span></div>
+
+    <!-- LOGIN -->
+    <div id="form-login">
+      <div class="form-group">
+        <label id="t-lbl-email">Email</label>
+        <input type="email" id="login-email" autocomplete="email">
+      </div>
+      <div class="form-group pw-field">
+        <label id="t-lbl-pw">Mot de passe</label>
+        <input type="password" id="login-pw" autocomplete="current-password">
+        <button class="pw-toggle" data-target="login-pw">👁</button>
+      </div>
+      <div class="error-msg" id="login-error"></div>
+      <button class="btn" id="btn-login">Se connecter</button>
+      <div class="auth-links">
+        <a id="link-forgot">Mot de passe oublié ?</a>
+        <a id="link-to-register">Créer un compte</a>
+      </div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="form-register" style="display:none">
+      <div class="form-group">
+        <label id="t-lbl-name">Nom d'affichage</label>
+        <input type="text" id="reg-name" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="reg-email" autocomplete="email">
+      </div>
+      <div class="form-group pw-field">
+        <label id="t-lbl-pw-min">Mot de passe (min. 6 car.)</label>
+        <input type="password" id="reg-pw" autocomplete="new-password">
+        <button class="pw-toggle" data-target="reg-pw">👁</button>
+      </div>
+      <div class="error-msg" id="reg-error"></div>
+      <button class="btn" id="btn-register">Créer mon compte</button>
+      <div class="auth-links">
+        <a id="link-to-login">Déjà un compte ? Se connecter</a>
+      </div>
+    </div>
+
+    <!-- FORGOT -->
+    <div id="form-forgot" style="display:none">
+      <p id="t-forgot-desc" class="form-desc">Entrez votre email pour recevoir un lien de réinitialisation.</p>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="forgot-email" autocomplete="email">
+      </div>
+      <div class="error-msg" id="forgot-error"></div>
+      <div class="success-msg" id="forgot-success"></div>
+      <button class="btn" id="btn-forgot">Envoyer le lien</button>
+      <div class="auth-links">
+        <a id="link-back-login">← Retour</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-screen" class="screen">
+  <div class="topbar">
+    <div class="brand-logo">Partage<span>Task</span></div>
+    <div class="topbar-right">
+      <div class="lang-selector">
+        <button class="lang-btn" id="lang-btn">🌍 <span id="lang-label">FR</span> ▾</button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <div class="lang-opt" data-lang="fr">🇫🇷 Français</div>
+          <div class="lang-opt" data-lang="en">🇬🇧 English</div>
+          <div class="lang-opt" data-lang="es">🇪🇸 Español</div>
+          <div class="lang-opt" data-lang="ar">🇸🇦 العربية</div>
+          <div class="lang-opt" data-lang="it">🇮🇹 Italiano</div>
+        </div>
+      </div>
+      <div class="user-badge">
+        <div id="dash-avatar-wrap"></div>
+        <span id="dash-name"></span>
+      </div>
+      <button class="icon-btn" id="btn-help-dash">❓</button>
+      <button class="icon-btn" id="btn-pw-dash">🔑</button>
+      <button class="icon-btn" id="btn-logout-dash">⏻</button>
+    </div>
+  </div>
+  <div class="dashboard-main">
+    <div class="dash-header">
+      <h1 id="t-my-projects">Mes projets</h1>
+      <div class="dash-actions">
+        <button class="btn sm secondary" id="btn-join-project">🔗 Rejoindre</button>
+        <button class="btn sm" id="btn-new-project">+ Nouveau projet</button>
+      </div>
+    </div>
+    <div class="projects-grid" id="projects-grid">
+      <div class="skeleton sk-card"></div>
+      <div class="skeleton sk-card"></div>
+      <div class="skeleton sk-card"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP (Espace projet) -->
+<div id="app-screen" class="screen">
+  <div class="header">
+    <button class="back-btn" id="btn-back">← Projets</button>
+    <div class="project-title" id="app-project-name"></div>
+    <span class="project-currency" id="app-project-currency"></span>
+    <div class="header-right">
+      <div class="lang-selector">
+        <button class="lang-btn" id="lang-btn-app">🌍 <span id="lang-label-app">FR</span> ▾</button>
+        <div class="lang-dropdown" id="lang-dropdown-app">
+          <div class="lang-opt" data-lang="fr">🇫🇷 Français</div>
+          <div class="lang-opt" data-lang="en">🇬🇧 English</div>
+          <div class="lang-opt" data-lang="es">🇪🇸 Español</div>
+          <div class="lang-opt" data-lang="ar">🇸🇦 العربية</div>
+          <div class="lang-opt" data-lang="it">🇮🇹 Italiano</div>
+        </div>
+      </div>
+      <button class="icon-btn" id="btn-invite">🔗</button>
+      <button class="icon-btn" id="btn-export-pdf">📄</button>
+      <button class="icon-btn" id="btn-export-excel">📊</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <nav class="page-nav" id="page-nav">
+      <button class="page-btn active" data-page="depenses" id="nav-dep">📋 Dépenses</button>
+      <button class="page-btn" data-page="recettes" id="nav-rec">💰 Recettes</button>
+      <button class="page-btn" data-page="bilan" id="nav-bil">⚖️ Bilan</button>
+      <button class="page-btn" data-page="membres" id="nav-mem">👥 Membres</button>
+    </nav>
+
+    <!-- DÉPENSES -->
+    <div id="page-depenses" class="page">
+      <div class="summary" id="dep-summary"></div>
+      <div class="tabs">
+        <button class="tab active" data-tab="dep-add" data-group="dep">+ Ajouter</button>
+        <button class="tab" data-tab="dep-list" data-group="dep">📋 Liste</button>
+        <button class="tab" data-tab="dep-history" data-group="dep">📜 Historique</button>
+      </div>
+      <div id="dep-add">
+        <div class="add-panel">
+          <div class="section-title" id="t-add-dep">➕ Nouvelle dépense</div>
+          <div class="add-grid-3">
+            <div class="form-group"><label id="t-lbl-desc">Description</label><input type="text" id="dep-desc"></div>
+            <div class="form-group"><label id="t-lbl-qty">Qté</label><input type="number" id="dep-qty" min="0" step="any"></div>
+            <div class="form-group"><label id="t-lbl-price">Prix unit.</label><input type="number" id="dep-price" min="0" step="any"></div>
+          </div>
+          <div class="add-footer">
+            <button class="btn sm success" id="btn-add-dep">Ajouter</button>
+            <span id="dep-preview"></span>
+          </div>
+        </div>
+      </div>
+      <div id="dep-list" style="display:none">
+        <div class="table-wrap">
+          <table id="dep-table">
+            <thead><tr>
+              <th id="t-th-desc">Description</th>
+              <th id="t-th-qty">Qté</th>
+              <th id="t-th-price">Prix</th>
+              <th id="t-th-total">Total</th>
+              <th id="t-th-author">Auteur</th>
+              <th id="t-th-date">Date</th>
+              <th>📎</th>
+              <th id="dep-actions-col" style="display:none">Actions</th>
+            </tr></thead>
+            <tbody id="dep-body"></tbody>
+            <tfoot id="dep-foot"></tfoot>
+          </table>
+        </div>
+      </div>
+      <div id="dep-history" style="display:none">
+        <div class="history-toolbar">
+          <input type="text" id="dep-hist-search" placeholder="Rechercher..." class="hist-search-input">
+          <select id="dep-hist-filter" class="hist-filter-select">
+            <option value="all">Toutes les actions</option>
+            <option value="create">✅ Créations</option>
+            <option value="edit">✏️ Modifications</option>
+            <option value="delete">🗑 Suppressions</option>
+          </select>
+        </div>
+        <div id="dep-history-list" class="history-list"></div>
+      </div>
+    </div>
+
+    <!-- RECETTES -->
+    <div id="page-recettes" class="page" style="display:none">
+      <div class="summary" id="rec-summary"></div>
+      <div class="tabs">
+        <button class="tab active" data-tab="rec-add" data-group="rec">+ Ajouter</button>
+        <button class="tab" data-tab="rec-list" data-group="rec">💰 Liste</button>
+        <button class="tab" data-tab="rec-history" data-group="rec">📜 Historique</button>
+      </div>
+      <div id="rec-add">
+        <div class="add-panel" style="border-color:#3ecf8e44">
+          <div class="section-title" id="t-add-rec">💰 Nouvelle recette</div>
+          <div class="add-grid-2">
+            <div class="form-group"><label id="t-lbl-desc2">Description</label><input type="text" id="rec-desc"></div>
+            <div class="form-group"><label id="t-lbl-amount">Montant</label><input type="number" id="rec-amount" min="0" step="any"></div>
+          </div>
+          <div class="add-footer">
+            <button class="btn sm" style="background:var(--success)" id="btn-add-rec">Ajouter</button>
+            <span id="rec-preview"></span>
+          </div>
+        </div>
+      </div>
+      <div id="rec-list" style="display:none">
+        <div class="table-wrap">
+          <table id="rec-table">
+            <thead><tr>
+              <th>Description</th><th>Montant</th><th>Part/pers.</th>
+              <th>Auteur</th><th>Date</th>
+              <th id="rec-actions-col" style="display:none">Actions</th>
+            </tr></thead>
+            <tbody id="rec-body"></tbody>
+            <tfoot id="rec-foot"></tfoot>
+          </table>
+        </div>
+      </div>
+      <div id="rec-history" style="display:none">
+        <div class="history-toolbar">
+          <input type="text" id="rec-hist-search" placeholder="Rechercher..." class="hist-search-input">
+          <select id="rec-hist-filter" class="hist-filter-select">
+            <option value="all">Toutes les actions</option>
+            <option value="create">✅ Créations</option>
+            <option value="edit">✏️ Modifications</option>
+            <option value="delete">🗑 Suppressions</option>
+          </select>
+        </div>
+        <div id="rec-history-list" class="history-list"></div>
+      </div>
+    </div>
+
+    <!-- BILAN -->
+    <div id="page-bilan" class="page" style="display:none">
+      <div class="section-title" id="t-bilan-title">⚖️ Bilan</div>
+      <div class="bilan-grid" id="bilan-cards"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th id="t-th-member">Membre</th>
+            <th id="t-th-budget">Budget</th>
+            <th id="t-th-rec-n">Recettes (÷N)</th>
+            <th id="t-th-dep-n">Dépenses (÷N)</th>
+            <th id="t-th-solde">Solde</th>
+          </tr></thead>
+          <tbody id="bilan-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MEMBRES -->
+    <div id="page-membres" class="page" style="display:none">
+      <div class="invite-box" id="invite-section">
+        <div class="section-title" id="t-invite-members">🔗 Inviter des membres</div>
+        <p id="t-share-code" class="form-desc">Partagez ce code ou ce lien :</p>
+        <div class="invite-code" id="invite-code-display"></div>
+        <div class="invite-link" id="invite-link-display"></div>
+        <div class="invite-hint" id="t-click-copy">Cliquer pour copier</div>
+        <div id="regen-wrap" style="display:none;margin-top:.8rem;text-align:center">
+          <button class="btn xs secondary" id="btn-regen-code">🔄 Nouveau code</button>
+        </div>
+      </div>
+      <div id="pending-section" style="display:none;margin-bottom:1.5rem">
+        <div class="section-title pending-title">⏳ Demandes en attente (<span id="pending-count">0</span>)</div>
+        <div class="members-grid" id="pending-grid"></div>
+      </div>
+      <div class="section-title">👥 Membres (<span id="members-count">0</span>)</div>
+      <div class="members-grid" id="members-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="modals-container"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- INACTIVITÉ -->
+<div class="inactivity-overlay" id="inactivity-modal">
+  <div class="inactivity-box">
+    <div class="inactivity-icon">⏱</div>
+    <div class="inactivity-title" id="t-inactivity-title">Session inactive</div>
+    <div id="t-inactivity-desc">Vous allez être déconnecté dans</div>
+    <div class="inactivity-countdown" id="inactivity-countdown">60</div>
+    <div id="t-inactivity-desc2">secondes pour inactivité</div>
+    <div class="inactivity-actions">
+      <button class="btn danger" id="btn-inactivity-logout">Déconnexion</button>
+      <button class="btn" id="btn-inactivity-stay">Rester connecté</button>
+    </div>
+  </div>
+</div>
+
+<!-- TUTORIEL -->
+<div class="tuto-overlay" id="tuto-overlay">
+  <div class="tuto-box">
+    <div class="tuto-dots" id="tuto-dots"></div>
+    <div class="tuto-icon" id="tuto-icon"></div>
+    <div class="tuto-title" id="tuto-title"></div>
+    <div class="tuto-desc" id="tuto-desc"></div>
+    <div class="tuto-nav">
+      <button class="btn secondary" id="tuto-prev">Précédent</button>
+      <button class="btn" id="tuto-next">Suivant →</button>
+    </div>
+    <div class="tuto-skip"><button id="tuto-skip">Passer</button></div>
+  </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
