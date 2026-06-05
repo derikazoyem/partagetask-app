@@ -438,7 +438,7 @@ prior written permission from the author.
 
 **Derik Azoyem**
 - Email: dazoyem@gmail.com
-- GitHub: [@dazoyem](https://github.com/derikazoyem)
+- GitHub: [@derikazoyem](https://github.com/derikazoyem)
 
 ---
 
