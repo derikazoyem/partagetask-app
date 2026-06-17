@@ -11,11 +11,11 @@ import { getFunctions, httpsCallable } from 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: '#',
-  authDomain: 'partagetask.firebaseapp.com',
-  projectId: 'partagetask',
-  storageBucket: 'partagetask.firebasestorage.app',
-  messagingSenderId: '508127987478',
-  appId: '1:508127987478:web:f2adf97fa18f607932b237'
+  authDomain: '#',
+  projectId: '#',
+  storageBucket: '#',
+  messagingSenderId: '#',
+  appId: '#'
 }
 
 const app = initializeApp(firebaseConfig)
