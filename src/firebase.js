@@ -10,7 +10,7 @@ import { getStorage } from 'firebase/storage'
 import { getFunctions, httpsCallable } from 'firebase/functions'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCv14Esz5zSvyRJ2iSkdFADjC25VdiPlJ4',
+  apiKey: '#',
   authDomain: 'partagetask.firebaseapp.com',
   projectId: 'partagetask',
   storageBucket: 'partagetask.firebasestorage.app',
