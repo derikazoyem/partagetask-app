@@ -24,7 +24,7 @@ function updateDashHeader() {
   wrap.innerHTML = avatarHtml(ME.uid, ME.displayName, ME.photoURL, 32)
 }
 
-// ── Projets ────────────────────────────────────────────────────────────────
+// ── Projets
 function loadProjects() {
   if (unsubProjects) unsubProjects()
   const q = query(
@@ -120,7 +120,7 @@ function renderProjects(projects) {
   }, { once: false })
 }
 
-// ── Créer projet ───────────────────────────────────────────────────────────
+// ── Créer projet 
 export function openCreateModal() {
   import('./ui.js').then(({ createModal, openModal, closeModal }) => {
     const id = 'create-modal'
@@ -165,7 +165,7 @@ export function openCreateModal() {
   })
 }
 
-// ── Rejoindre projet ───────────────────────────────────────────────────────
+// ── Rejoindre projet
 export function openJoinModal(onSuccess) {
   import('./ui.js').then(({ createModal, openModal, closeModal }) => {
     const id = 'join-modal'
@@ -202,7 +202,7 @@ export function openJoinModal(onSuccess) {
   })
 }
 
-// ── Supprimer un projet (Admin) ───────────────────────────────────────────
+// ── Supprimer un projet (Admin)
 function openDeleteProjectModal(projectId, projectName) {
   import('./ui.js').then(({ createModal, openModal, closeModal, toast }) => {
     import('./i18n.js').then(({ t }) => {
@@ -248,7 +248,7 @@ function openDeleteProjectModal(projectId, projectName) {
   })
 }
 
-// ── Quitter un projet (Membre) ─────────────────────────────────────────────
+// ── Quitter un projet (Membre)
 function openLeaveProjectModal(projectId, projectName) {
   import('./ui.js').then(({ createModal, openModal, closeModal, toast }) => {
     import('./i18n.js').then(({ t }) => {
@@ -289,7 +289,7 @@ function openLeaveProjectModal(projectId, projectName) {
   })
 }
 
-// ── Rejoindre via URL ─────────────────────────────────────────────────────
+// ── Rejoindre via URL
 export async function handleUrlJoin(code, onSuccess) {
   try {
     const result = await fnJoinProject({ code: code.toUpperCase() })
