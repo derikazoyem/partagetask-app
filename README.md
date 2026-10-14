@@ -33,6 +33,9 @@
 
 ## Overview
 
+PartageTask (partagetask.com) is a web-based management platform designed for training centers.
+The application brings together administrative and secretarial activities in a single environment, including student management, tuition fee tracking, income and expense recording, financial reporting, and balance calculations. It also features multiple workspaces, invitations and role management, notifications, change history, a multilingual interface, and data export. 
+
 PartageTask is a web application that allows groups of people to manage their shared expenses. Create a project, invite members, record expenses and revenues, and the app automatically calculates who owes what to whom.
 
 **Use cases:**
@@ -168,8 +171,6 @@ partagetask-app/
 │   └── langs/              # Translation files
 │       ├── fr.json
 │       ├── en.json
-│       ├── es.json
-│       ├── ar.json
 │       └── it.json
 └── src/
     ├── main.js             # JS entry point, event listeners, auth state
