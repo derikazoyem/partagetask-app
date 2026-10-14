@@ -308,6 +308,8 @@ flowchart TB
     CF -->|"sensitive writes"| FS
     AUTH -.->|"verified-email token"| FS
 ```
+The GitHub repository holds two sibling packages:
+
 ```
 partagetask/
 ├── partagetask-app/           # Frontend (this package)
@@ -319,7 +321,7 @@ partagetask/
         ├── index.js           # All 6 callable functions
         └── package.json       # Node.js 24 engine
 ```
-The GitHub repository holds two sibling packages:
+
 
 ### `partagetask-app/`
 
