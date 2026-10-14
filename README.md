@@ -186,7 +186,11 @@ partagetask-app/
     ├── notifications.js    # Real-time in-app notifications
     ├── files.js            # Firebase Storage upload
     ├── export.js           # PDF (jsPDF) and Excel (SheetJS) lazy-loaded
-    └── styles.css          # All CSS (dark theme)
+    └── styles.css         # All CSS (dark theme)
+|__test/
+    ├── scolarita.test.js
+    ├── summary-parity.test.js
+    ├──  ui.test.js
 ```
 
 ### Cloud Functions (`partagetask-functions/`)
