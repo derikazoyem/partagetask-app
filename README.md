@@ -440,7 +440,7 @@ firebase deploy --only functions
 
 ```bash
 firebase functions:secrets:set GMAIL_USER
-firebase functions:secrets:set GMAIL_PASS
+firebase functions:secrets:set GMAIL_APP_PASSWORD
 ```
 
 ### 5. Authentication — Important settings
