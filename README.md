@@ -17,6 +17,16 @@
 
 ---
 
+## 📸 Screenshots
+
+| Expenses & summaries | Tuition tracking |
+|:---:|:---:|
+| ![Expenses](docs/screenshots/expenses.png) | ![Tuition tracking](docs/screenshots/tuition.png) |
+| **Student registry** | **Per-member balance** |
+| ![Student registry](docs/screenshots/registry.png) | ![Balance](docs/screenshots/balance.png) |
+
+---
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -30,6 +40,7 @@
 - [Deployment](#deployment)
 - [Internationalization](#internationalization)
 - [Testing](#testing)
+- [Screenshots](#-screenshots)
 
 ---
 
