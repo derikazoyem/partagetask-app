@@ -274,6 +274,38 @@ The identity directory for the center (`src/etudiants.js`, collection `registreE
 
 The GitHub repository holds two sibling packages:
 
+```mermaid
+flowchart TB
+    subgraph browser["Client - Browser"]
+        SPA["Vite SPA - Vanilla JS, ES Modules"]
+        MODS["main, project, scolarite, etudiants<br/>export, historique, ui, i18n"]
+        SPA --- MODS
+    end
+
+    subgraph netlify["Netlify"]
+        HOST["Static hosting<br/>CSP and security headers"]
+    end
+
+    subgraph mainfb["Firebase - main project, Blaze plan"]
+        AUTH["Authentication<br/>Email/Password and Google"]
+        FS[("Cloud Firestore<br/>with Security Rules")]
+        STO[("Storage<br/>receipts and enrolment PDFs")]
+        CF["Cloud Functions v2<br/>createProject, joinProject, approveMember<br/>rejectMember, regenerateInviteCode, sendFeedback"]
+    end
+
+    subgraph aiproj["Firebase - AI project, Spark free plan"]
+        GEM["AI Logic<br/>Gemini 2.5 Flash Lite"]
+    end
+
+    HOST --> SPA
+    MODS -->|"real-time reads"| FS
+    MODS -->|"sign-in"| AUTH
+    MODS -->|"file upload"| STO
+    MODS -->|"callable"| CF
+    MODS -->|"help assistant"| GEM
+    CF -->|"sensitive writes"| FS
+    AUTH -.->|"verified-email token"| FS
+```
 ```
 partagetask/
 ├── partagetask-app/           # Frontend (this package)
