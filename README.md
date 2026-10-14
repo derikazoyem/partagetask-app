@@ -272,7 +272,9 @@ The identity directory for the center (`src/etudiants.js`, collection `registreE
 
 ## Architecture
 
-The GitHub repository holds two sibling packages:
+### Runtime overview
+
+How the deployed components interact at runtime:
 
 ```mermaid
 flowchart TB
@@ -317,6 +319,7 @@ partagetask/
         ├── index.js           # All 6 callable functions
         └── package.json       # Node.js 24 engine
 ```
+The GitHub repository holds two sibling packages:
 
 ### `partagetask-app/`
 
